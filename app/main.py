@@ -7,19 +7,15 @@ class IntegerRange:
         self.max_amount = max_amount
 
     def __set_name__(self, owner: type, name: str) -> None:
-        self.name = name
+        self.name = "_" + name
 
     def __get__(self, instance: object, owner: type) -> object:
-        if instance is None:
-            return self
-        return instance.__dict__[self.name]
+        return getattr(instance, self.name)
 
-    def __set__(self, instance: object, value: int | str) -> None:
-        if not isinstance(value, int):
-            raise TypeError
+    def __set__(self, instance: object, value: int) -> None:
         if value < self.min_amount or value > self.max_amount:
             raise ValueError
-        instance.__dict__[self.name] = value
+        setattr(instance, self.name, value)
 
 
 class Visitor:
